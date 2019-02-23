@@ -10,7 +10,7 @@ Instructions:
 // Inline configuration for jshint below. Prevents `gulp jshint` from failing with quiz starter code.
 /* jshint unused: false */
 
-(function(document) {
+(function (document) {
   'use strict';
 
   var home = null;
@@ -29,13 +29,8 @@ Instructions:
    * @return {Promise}    - A Promise that resolves when the XHR succeeds and fails otherwise.
    */
   function get(url) {
-    /*
-    Use the Fetch API to GET a URL.
-    Return the fetch.
-
-    Your code goes here!
-     */
-  }
+    return fetch(url);
+  };
 
   /**
    * Performs an XHR for a JSON and returns a parsed JSON response.
@@ -43,21 +38,21 @@ Instructions:
    * @return {Promise}    - A promise that passes the parsed JSON response.
    */
   function getJSON(url) {
-    /*
-    Return a Promise that gets a URL and parses the JSON response. Use your get method!
+    return get(url).then(function (response) {
+      return response.json();
+    });
+  };
 
-    Your code goes here!
-     */
-  }
-
-  window.addEventListener('WebComponentsReady', function() {
+  window.addEventListener('WebComponentsReady', function () {
     home = document.querySelector('section[data-route="home"]');
-    /*
-    Uncomment the next line when you're ready to test!
-    Don't forget to chain with a .then and a .catch!
-
-    Your code goes here too!
-     */
-    // getJSON('../data/earth-like-results.json')
+    getJSON('../data/earth-like-results.json')
+      .then(function (response) {
+        addSearchHeader('unknown');
+        console.log(response);
+        return response.results[0];
+      })
+      .then(function (url) {
+        console.log(url);
+      })
   });
 })(document);
